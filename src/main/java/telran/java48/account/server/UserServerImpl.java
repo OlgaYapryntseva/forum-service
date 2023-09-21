@@ -32,7 +32,7 @@ public class UserServerImpl implements UserServer{
 
 	@Override
 	public UserDto loginUser(String token) {
-//		System.out.println(token);
+                // TODO Auto-generated method stub
 		return null;
 	}
 
@@ -80,7 +80,6 @@ public class UserServerImpl implements UserServer{
 
 	@Override
 	public void changePassword(String newPassword) {
-		System.out.println("Metod changePassword = " +  newPassword);
 		// TODO Auto-generated method stub
 		
 	}
