@@ -5,7 +5,6 @@ import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-
 public class RegisterDto {
   @NotBlank
   String login;
