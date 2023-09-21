@@ -24,7 +24,7 @@ public class User {
 	@Setter
 	String lastName;
 	Set<String> role;
-	//private String token;
+
 	
 	public User() {
 		role = new HashSet<>();
