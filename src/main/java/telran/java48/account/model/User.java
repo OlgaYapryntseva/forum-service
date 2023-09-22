@@ -18,13 +18,14 @@ import lombok.ToString;
 public class User {
 	@Id
 	String login;
+	@Setter
 	String password;
 	@Setter
 	String firstName;
 	@Setter
 	String lastName;
 	Set<String> role;
-	//private String token;
+
 	
 	public User() {
 		role = new HashSet<>();
@@ -37,6 +38,12 @@ public class User {
 	public void addRole(String newrole) {
 		role.add(newrole);
 	}
-
-
+	
+//	public boolean removeRole(String roles) {
+//		return role.remove(roles);
+//	}
+//
+//	public boolean addRole(String newrole) {
+//		return role.add(newrole);
+//	}
 }

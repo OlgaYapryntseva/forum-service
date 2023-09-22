@@ -15,6 +15,7 @@ import lombok.Setter;
 @Builder
 public class UserDto {
 	String login;
+	@Setter
 	String password;
 	@Setter
 	String firstName;

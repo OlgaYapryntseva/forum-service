@@ -1,6 +1,10 @@
 package telran.java48.account.controller;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,14 +13,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import telran.java48.account.dto.RegisterDto;
 import telran.java48.account.dto.RoleDto;
 import telran.java48.account.dto.UpdateDto;
 import telran.java48.account.dto.UserDto;
-import telran.java48.account.dto.exceptions.UserFoundException;
-import telran.java48.account.server.UserServer;
+import telran.java48.account.dto.exceptions.UserExistsException;
+import telran.java48.account.service.UserService;
 
 
 @RestController
@@ -24,16 +29,16 @@ import telran.java48.account.server.UserServer;
 @RequestMapping("/account")
 public class UserController {
 	
-	final UserServer userServer;
+	final UserService userServer;
 	
 	@PostMapping("/register")
-	public UserDto registerUser(@Valid @RequestBody RegisterDto registerDto) throws UserFoundException{
+	public UserDto registerUser(@Valid @RequestBody RegisterDto registerDto) throws UserExistsException{
 		return userServer.registerUser(registerDto);
 	}
 
 	@PostMapping("/login")
-	public UserDto loginUser(@RequestHeader("Authorization") String token) {
-		return userServer.loginUser(token);
+	public UserDto loginUser(Principal principal) {
+		return userServer.findUser(principal.getName());
 	}
 
 	@DeleteMapping("/user/{user}")
@@ -62,8 +67,9 @@ public class UserController {
 	}
      
 	@PutMapping("/password")
-	public void changePassword(@RequestHeader("X-Password") String newPassword) {
-		userServer.changePassword(newPassword);
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void changePassword(Principal principal,@RequestHeader("X-Password") String newPassword) {
+		userServer.changePassword(principal.getName(),newPassword);
     }
 	
 	

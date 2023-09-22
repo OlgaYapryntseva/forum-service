@@ -1,14 +1,14 @@
-package telran.java48.account.server;
+package telran.java48.account.service;
 
 import telran.java48.account.dto.RegisterDto;
 import telran.java48.account.dto.RoleDto;
 import telran.java48.account.dto.UpdateDto;
 import telran.java48.account.dto.UserDto;
-import telran.java48.account.dto.exceptions.UserFoundException;
+import telran.java48.account.dto.exceptions.UserExistsException;
 
 
-public interface UserServer {
-    UserDto registerUser(RegisterDto registerDto) throws UserFoundException;
+public interface UserService {
+    UserDto registerUser(RegisterDto registerDto) throws UserExistsException;
     
     UserDto loginUser(String token);
     
@@ -22,6 +22,6 @@ public interface UserServer {
     
     UserDto findUser(String login);
     
-    void changePassword(String newPassword);
+	void changePassword(String login, String newPassword);
     
 }

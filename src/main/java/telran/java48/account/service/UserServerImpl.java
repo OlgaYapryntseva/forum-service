@@ -1,5 +1,6 @@
-package telran.java48.account.server;
+package telran.java48.account.service;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,7 @@ import telran.java48.account.dto.RegisterDto;
 import telran.java48.account.dto.RoleDto;
 import telran.java48.account.dto.UpdateDto;
 import telran.java48.account.dto.UserDto;
-import telran.java48.account.dto.exceptions.UserFoundException;
+import telran.java48.account.dto.exceptions.UserExistsException;
 import telran.java48.account.dto.exceptions.UserNotFoundException;
 import telran.java48.account.model.User;
 import telran.java48.account.repository.UserRepository;
@@ -15,17 +16,20 @@ import telran.java48.account.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class UserServerImpl implements UserServer{
+public class UserServerImpl implements UserService{
 	
 	final UserRepository userRepository;
 	final ModelMapper modelMapper;
 
 	@Override
-	public UserDto registerUser(RegisterDto registerDto) throws UserFoundException{
+	public UserDto registerUser(RegisterDto registerDto) throws UserExistsException{
 		if (userRepository.existsById(registerDto.getLogin())) {
-     		throw new UserFoundException();
+     		throw new UserExistsException();
 		}
 		User user = modelMapper.map(registerDto, User.class);
+		user.addRole("USER");
+		String password = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+		user.setPassword(password);
 		userRepository.save(user);
 		return modelMapper.map(user, UserDto.class);
 	}
@@ -59,6 +63,15 @@ public class UserServerImpl implements UserServer{
 	@Override
 	public RoleDto addRole(String login, String role) {
 		User user = userRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
+//		boolean res;
+//		if(isAddRole) {
+//			res = user.addRole(role);
+//		}else {
+//			res = user.removeRole(role)
+//		}
+//		if(res) {
+//		userRepository.save(user);
+//		}
 		user.addRole(role);
 		userRepository.save(user);
 		return modelMapper.map(user, RoleDto.class);
@@ -79,9 +92,13 @@ public class UserServerImpl implements UserServer{
 	}
 
 	@Override
-	public void changePassword(String newPassword) {
+	public void changePassword(String login,String newPassword) {
+		User user = userRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
+		user.setPassword(newPassword);
+		userRepository.save(user);
 		System.out.println("Metod changePassword = " +  newPassword);
 		// TODO Auto-generated method stub
 		
 	}
+
 }
