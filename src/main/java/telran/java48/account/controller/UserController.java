@@ -70,6 +70,7 @@ public class UserController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void changePassword(Principal principal,@RequestHeader("X-Password") String newPassword) {
 		userServer.changePassword(principal.getName(),newPassword);
+		
     }
 	
 	
