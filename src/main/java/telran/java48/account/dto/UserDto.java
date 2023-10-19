@@ -1,13 +1,12 @@
 package telran.java48.account.dto;
 
 import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-
+import lombok.Singular;
 
 @Getter
 @AllArgsConstructor
@@ -15,11 +14,8 @@ import lombok.Setter;
 @Builder
 public class UserDto {
 	String login;
-	@Setter
-	String password;
-	@Setter
 	String firstName;
-	@Setter
 	String lastName;
-	Set<String> role;
+	@Singular
+	Set<String> roles;
 }

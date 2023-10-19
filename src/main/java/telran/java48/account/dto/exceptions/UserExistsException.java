@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class UserExistsException extends RuntimeException{
-	private static final long serialVersionUID = 5378082918253424019L;
+	public UserExistsException(String message) {
+		super(message);
+	}
+	private static final long serialVersionUID = 1L;
 
 }
